@@ -269,4 +269,10 @@ This project adheres to all internship guidelines regarding domain scope, toolin
 
 ---
 
+📜 License
+
+This project is released under the MIT License and is intended strictly for academic and educational purposes.
+
+---
+
 👨‍💻 **Developed by:** M V Karthikeya
