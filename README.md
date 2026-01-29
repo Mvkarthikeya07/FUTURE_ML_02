@@ -162,10 +162,10 @@ Screenshots are included in the repository under the `/screenshots/` directory:
 <img width="1366" height="768" alt="Screenshot (127)" src="https://github.com/user-attachments/assets/ca58547d-b5c1-4d50-b41d-a7fa624b2bc0" />
 
 * Result Page – Technical issue classification
-<img width="1366" height="768" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/8708646c-efc8-418e-860f-8998b942ae86" />
+<img width="1366" height="768" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/a4ce900e-32ec-449f-8fc7-2cb259f0e8f2" />
 
 * Result Page – Medium priority billing case
-<img width="1366" height="768" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/792b319e-649b-40ee-bc17-3072f739c8d4" />
+<img width="1366" height="768" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/8708646c-efc8-418e-860f-8998b942ae86" />
 
 (These screenshots are taken from the **actual running application**, not mockups.)
 
