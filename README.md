@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=24&pause=1000&color=2E86C1&center=true&vCenter=true&width=950&lines=🎫+NLP+Support+Ticket+Classification+System;TF-IDF+%7C+Logistic+Regression+%7C+Flask;Automated+Triage+%7C+10%2C000%2B+Tickets+Processed" alt="Typing SVG" />
+<h1>🎫 NLP-Based Support Ticket Classification & Priority Assignment System</h1>
+<h3>Automated Customer Support Triage · TF-IDF · Logistic Regression · Flask Deployment</h3>
 
 <br/>
 
@@ -38,7 +39,9 @@
 - [Dataset](#-dataset)
 - [Project Structure](#-project-structure)
 - [Installation Guide](#-installation--reproduction-guide)
+- [Tech Stack](#-tech-stack)
 - [Resume Pitch](#-resume-ready-pitch)
+- [Internship Metadata](#-internship-metadata)
 - [Future Roadmap](#-future-roadmap)
 - [Author](#-author)
 
@@ -135,8 +138,8 @@ User Submits Ticket Text
        │                │
        ▼                ▼
 ┌─────────────┐  ┌──────────────────┐
-│ TF-IDF      │  │ Priority Engine  │
-│ Vectorizer  │  │ Keyword Matcher  │
+│  TF-IDF     │  │ Priority Engine  │
+│  Vectorizer │  │ Keyword Matcher  │
 └──────┬──────┘  └────────┬─────────┘
        │                  │
        ▼                  ▼
@@ -179,14 +182,6 @@ text = re.sub(r'[^a-z\s]', '', text)
 tokens = [w for w in text.split() if w not in stopwords.words('english')]
 ```
 
-Formally:
-
-$$\text{Cleaned}(T) = \{\ w \in \text{tokens}(T) \mid w \notin \mathcal{S}\ \}$$
-
-where $\mathcal{S}$ is the NLTK English stopword corpus.
-
----
-
 ### 2. TF-IDF Vectorization
 
 Token streams are mapped to numerical feature vectors using Term Frequency–Inverse Document Frequency:
@@ -195,11 +190,9 @@ $$\text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D)$$
 
 $$\text{IDF}(t, D) = \log\left(\frac{1 + |D|}{1 + |\{d \in D : t \in d\}|}\right) + 1$$
 
-This ensures common, low-signal words (e.g., "please", "help") are down-weighted, while domain-specific terms (e.g., "refund", "outage", "login") receive higher weights.
+This ensures common low-signal words (e.g., "please", "help") are down-weighted, while domain-specific terms (e.g., "refund", "outage", "login") receive higher weights.
 
----
-
-### 3. Multi-Class Classification
+### 3. Multi-Class Classification (Softmax)
 
 Logistic Regression with Softmax normalization for 4-class prediction:
 
@@ -211,10 +204,10 @@ $$P(Y = c \mid \mathbf{x}) = \frac{e^{\mathbf{w}_c^\top \mathbf{x} + b_c}}{\disp
 
 ## 📊 Model Comparison & Selection
 
-Six text classification models were evaluated on the same TF-IDF feature space and 80/20 train-test split. Results below:
+Six supervised text classification models were trained and evaluated on the same TF-IDF feature space and 80/20 train-test split:
 
-| 🤖 Model | Accuracy ↑ | Precision ↑ | Recall ↑ | F1 Score ↑ | Training Speed | Interpretability |
-|----------|------------|-------------|----------|------------|----------------|-----------------|
+| 🤖 Model | Accuracy ↑ | Precision ↑ | Recall ↑ | F1 Score ↑ | Speed | Interpretability |
+|----------|------------|-------------|----------|------------|-------|-----------------|
 | **Logistic Regression** ⭐ | **0.94** | **0.93** | **0.94** | **0.93** | ⚡ Fast | ⭐⭐⭐⭐⭐ Highest |
 | Linear SVC | 0.93 | 0.92 | 0.93 | 0.92 | ⚡ Fast | ⭐⭐⭐ Medium |
 | Multinomial Naive Bayes | 0.91 | 0.90 | 0.91 | 0.90 | ⚡⚡ Fastest | ⭐⭐⭐⭐ High |
@@ -222,32 +215,32 @@ Six text classification models were evaluated on the same TF-IDF feature space a
 | K-Nearest Neighbors | 0.82 | 0.81 | 0.82 | 0.81 | 🐢 Very Slow | ⭐⭐ Low |
 | Decision Tree | 0.79 | 0.78 | 0.79 | 0.78 | ⚡ Fast | ⭐⭐⭐ Medium |
 
-> ⭐ **Logistic Regression** is the production model — highest accuracy, fastest inference, and most interpretable. Its linear coefficients directly map to TF-IDF weights, meaning you can inspect *which keywords most strongly predict each category* — a critical property for business-facing ticket triage systems.
+> ⭐ **Logistic Regression** is the production model — highest F1 score, fastest inference, and fully interpretable coefficients that map directly to TF-IDF feature weights.
 
-### Why Logistic Regression Beats the Alternatives Here
+### Why Logistic Regression Wins for This Problem
 
 | Factor | Logistic Regression | Naive Bayes | Random Forest |
-|--------|--------------------|-----------|-|
-| Accuracy on TF-IDF features | ✅ Highest (0.94) | 0.91 | 0.88 |
-| Feature space: sparse TF-IDF | ✅ Optimal fit | ✅ Good | ⚠️ Poor (sparse) |
+|--------|:------------------:|:-----------:|:-------------:|
+| Accuracy on TF-IDF | ✅ 0.94 (best) | 0.91 | 0.88 |
+| Sparse feature space fit | ✅ Optimal | ✅ Good | ⚠️ Poor |
 | Inference speed | ✅ Milliseconds | ✅ Fast | ⚠️ Slower |
 | Probability calibration | ✅ Calibrated | ⚠️ Overconfident | ⚠️ Needs isotonic |
-| Coefficient interpretability | ✅ Direct | ❌ Log-probabilities | ❌ None |
+| Coefficient interpretability | ✅ Direct keyword mapping | ❌ Log-probabilities | ❌ None |
 | Memory footprint | ✅ Tiny | ✅ Tiny | ⚠️ Larger |
 
 ---
 
 ## 🚦 Priority Assignment Engine
 
-After ML classification, a keyword-based heuristic engine processes the same cleaned token stream to assign urgency:
+After ML classification, a keyword-based heuristic engine processes the cleaned token stream to assign urgency:
 
 | Priority | Trigger Keywords | Business Meaning |
 |----------|-----------------|-----------------|
-| 🔴 **High** | `not working`, `refund`, `error`, `failed`, `outage`, `urgent`, `broken`, `down` | System failures, payment disputes, service outages — immediate SLA response required |
-| 🟡 **Medium** | `slow`, `billing`, `charge`, `delay`, `issue`, `problem` | Performance degradation, pricing queries — response within SLA window |
-| 🟢 **Low** | *(default fallback)* | General inquiries, feature requests, feedback — standard queue |
+| 🔴 **High** | `not working`, `refund`, `error`, `failed`, `outage`, `urgent`, `broken`, `down` | System failures, payment disputes — immediate SLA response |
+| 🟡 **Medium** | `slow`, `billing`, `charge`, `delay`, `issue`, `problem` | Performance issues, pricing queries — within SLA window |
+| 🟢 **Low** | *(default fallback)* | General inquiries, feature requests — standard queue |
 
-**Why hybrid ML + rules?** The ML model handles *category routing* (what department) while the rule engine handles *urgency* (how fast). This separation is intentional: ML generalizes well to category semantics, but priority signals are business-defined and must be deterministic — a refund request must **always** be High priority, regardless of how novel the phrasing is.
+> **Design rationale:** The ML model handles *category routing* (which department) while the rule engine handles *urgency* (how fast). Priority must be deterministic — a payment failure must **always** be flagged High regardless of phrasing novelty.
 
 ---
 
@@ -255,16 +248,15 @@ After ML classification, a keyword-based heuristic engine processes the same cle
 
 | Property | Value |
 |----------|-------|
-| **Generation** | Synthetic — programmatically generated via `generate_dataset.py` |
+| **Generation** | Synthetic — programmatically created via `generate_dataset.py` |
 | **File** | `data/tickets.csv` |
 | **Total Records** | 10,000+ balanced support tickets |
-| **Classes** | Technical, Billing, Account, General (balanced distribution) |
-| **Features** | Raw ticket text (free-form English) |
+| **Classes** | Technical, Billing, Account, General (balanced) |
+| **Features** | Raw free-form English ticket text |
 | **Target** | Department category label |
 | **Split** | 80% training / 20% testing |
-| **Vocabulary** | Realistic business support language and domain terminology |
 
-> **Why synthetic data?** Real customer support tickets contain PII. A programmatic dataset allows full reproducibility, controlled class balance, and safe open-source sharing — while preserving realistic linguistic patterns.
+> **Why synthetic?** Real tickets contain PII. A programmatic dataset allows full reproducibility, controlled class balance, and safe open-source sharing while preserving realistic language patterns.
 
 ---
 
@@ -300,7 +292,6 @@ NLP-Support-Ticket-Classifier/
 ## ⚙️ Installation & Reproduction Guide
 
 ### Prerequisites
-
 - Python 3.8+
 - pip
 
@@ -310,10 +301,7 @@ NLP-Support-Ticket-Classifier/
 git clone https://github.com/Mvkarthikeya07/FUTURE_ML_02.git
 cd FUTURE_ML_02
 
-# Create virtual environment
 python -m venv venv
-
-# Activate
 venv\Scripts\activate        # Windows
 source venv/bin/activate     # macOS / Linux
 ```
@@ -336,7 +324,7 @@ python generate_dataset.py
 ```bash
 python train_model.py
 # Output: model/classifier.pkl + model/vectorizer.pkl
-# Prints: Accuracy, Classification Report on test set
+# Prints: Accuracy and Classification Report on test set
 ```
 
 ### 5️⃣ Launch the Web App
@@ -377,8 +365,8 @@ http://127.0.0.1:5000/
 > **NLP-Based Support Ticket Classification & Priority Triage System**
 > - Built an automated customer support routing system processing **10,000+ tickets** using a hybrid NLP + ML pipeline, achieving **94% classification accuracy** across 4 departments.
 > - Implemented a full NLP preprocessing stack (case normalization, regex filtering, NLTK stopword pruning) with **TF-IDF vectorization** and **multi-class Logistic Regression**.
-> - Designed a deterministic **keyword-based priority engine** to guarantee SLA-compliant triage for critical operational events (High / Medium / Low).
-> - Benchmarked **6 classification models** (Logistic Regression, SVC, Naive Bayes, Random Forest, KNN, Decision Tree) — selected best performer based on F1 score and inference speed.
+> - Designed a deterministic **keyword-based priority engine** for SLA-compliant triage across High / Medium / Low urgency levels.
+> - Benchmarked **6 classification models** (Logistic Regression, SVC, Naive Bayes, Random Forest, KNN, Decision Tree) and selected the best performer based on F1 score and inference speed.
 > - Deployed the complete inference stack as an interactive **Flask web application** with a modern SaaS-style enterprise interface.
 
 ---
@@ -401,12 +389,12 @@ http://127.0.0.1:5000/
 
 ## 🔮 Future Roadmap
 
-- [ ] 🤗 **Transformer Models** — Replace TF-IDF with BERT/DistilBERT contextual embeddings for semantic understanding
-- [ ] 📊 **Admin Analytics Panel** — Ticket volume by category, average triage time, priority distribution charts
-- [ ] 🗄️ **Database Integration** — PostgreSQL + SQLAlchemy for persistent ticket logging and audit trails
+- [ ] 🤗 **Transformer Models** — Replace TF-IDF with BERT/DistilBERT contextual embeddings
+- [ ] 📊 **Admin Analytics Panel** — Ticket volume, category ratios, priority distribution charts
+- [ ] 🗄️ **Database Integration** — PostgreSQL + SQLAlchemy for persistent ticket logging
 - [ ] 🐳 **Dockerization** — Containerize for cloud deployment (AWS ECS / Render / Railway)
-- [ ] 🔌 **REST API** — Expose classification endpoint for CRM / helpdesk integrations (Zendesk, Freshdesk)
-- [ ] 🧠 **SHAP Explainability** — Show which words drove each classification decision
+- [ ] 🔌 **REST API** — Expose classification endpoint for CRM integrations (Zendesk, Freshdesk)
+- [ ] 🧠 **SHAP Explainability** — Show which keywords drove each classification decision
 - [ ] 📱 **Sub-category Routing** — Expand from 4 to 15+ fine-grained ticket categories
 
 ---
@@ -432,7 +420,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**⭐ Found this useful? Star the repo and share it!**
+**⭐ Found this useful? Star the repo — it keeps the momentum going!**
 
 *Classified with precision. Triaged with intelligence. Deployed with purpose.*
 
