@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🎫 NLP-Based Support Ticket Classification & Priority Assignment Syste</h1>
+<h1>🎫 NLP-Based Support Ticket Classification & Priority Assignment System</h1>
 <h3>Automated Customer Support Triage · TF-IDF · Logistic Regression · Flask Deployment</h3>
 
 <br/>
